@@ -16,4 +16,5 @@ class myButton:
         self.name.set(name)
 
     def setPosition(self,x,y):
+        
         self.button.place(x = x, y = y)
