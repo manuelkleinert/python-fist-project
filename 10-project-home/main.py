@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
-
 from tkinter import *
-from classes.taps import Taps
+import helpter_func
 
 app = Tk()
 
@@ -10,7 +9,7 @@ app.configure(background='DimGray')
 app.geometry('600x600')
 app.resizable(width=False, height=False)
 
-taps = Taps(app)
+taps = helpter_func.taps_func(app)
 
 frame1 = taps.addFrame('test 1')
 frame2 = taps.addFrame('test 2')

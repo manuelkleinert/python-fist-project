@@ -1,8 +1,12 @@
 import os
-import yaml
+
+try:
+    import yaml
+except ImportError:
+    print 'yaml not install'
+    exit()
 
 root_dir = os.path.dirname(__file__)
-
 config_path = os.path.join(root_dir, 'config.yml')
 config = open(config_path, 'r')
 
