@@ -1,6 +1,15 @@
 # -*- coding: utf-8 -*-
+import sys
+
+print(sys.version_info)
+
+if sys.version_info < (3,8,0):
+    print('You need python 3.8 or later to run this script')
+    print(sys.version + ' > 3')
+    exit(1)
+
 from tkinter import *
-import helpter_func
+from helpter_func.taps import taps_func
 
 app = Tk()
 
@@ -9,7 +18,7 @@ app.configure(background='DimGray')
 app.geometry('600x600')
 app.resizable(width=False, height=False)
 
-taps = helpter_func.taps_func(app)
+taps = taps_func(app)
 
 frame1 = taps.addFrame('test 1')
 frame2 = taps.addFrame('test 2')
