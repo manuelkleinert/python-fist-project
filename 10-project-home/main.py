@@ -32,7 +32,7 @@ class main:
 
         for floor in self.data['floors']:
             frame = self.taps.addFrame(floor['tag'])
-            content = Label(frame, text = 'test content ' + floor['title'])
+            content = Label(frame, text = 'Test Content ' + floor['title'])
             content.grid(column = 0, row = 0, padx = 30, pady = 30)
 
 main()
