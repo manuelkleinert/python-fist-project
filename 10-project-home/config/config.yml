@@ -1,0 +1,7 @@
+floors:
+  - tag: 'EG'
+    title: 'Erdgeschoss'
+  - tag: '1 OG'
+    title: 'Erstes OG'
+  - tag: '2 OG'
+    title: 'Zweites OG'

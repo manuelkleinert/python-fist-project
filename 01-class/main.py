@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from tkinter import *
-from button import myButton
+from test.button import myButton
 
 window = Tk()
 

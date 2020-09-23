@@ -1,24 +1,38 @@
 # -*- coding: utf-8 -*-
+import sys
+
+if sys.version_info < (3,8,0):
+    print('You need python 3.8 or later to run this script')
+    print(sys.version + ' > 3')
+    exit(1)
 
 from tkinter import *
-from classes.taps import Taps
+from helper.taps import Taps
+from helper.config import Config
 
-app = Tk()
+class main:
+    def __init__(self):
+        config = Config(__file__)
+        self.data = config.get()
+        self.app = Tk()
 
-app.title('Home')
-app.configure(background='DimGray')
-app.geometry('600x600')
-app.resizable(width=False, height=False)
+        self.setWindow()
+        self.setTaps()
+        self.app.mainloop()
 
-taps = Taps(app)
+    def setWindow(self):
+        self.app.title('Home')
+        self.app.configure(background='DimGray')
+        self.app.geometry('600x600')
+        self.app.resizable(width=False, height=False)
 
-frame1 = taps.addFrame('test 1')
-frame2 = taps.addFrame('test 2')
 
-content = Label(frame1, text = 'test 1 content')
-content.grid(column = 0, row = 0, padx = 30, pady = 30)
+    def setTaps(self):
+        self.taps = Taps(self.app)
 
-content2 = Label(frame2, text = 'test 2 content')
-content2.grid(column = 0, row = 0, padx = 30, pady = 30)
+        for floor in self.data['floors']:
+            frame = self.taps.addFrame(floor['tag'])
+            content = Label(frame, text = 'Test Content ' + floor['title'])
+            content.grid(column = 0, row = 0, padx = 30, pady = 30)
 
-app.mainloop()
+main()
