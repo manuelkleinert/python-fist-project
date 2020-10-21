@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Home Connect</title>
+  <meta charset="utf-8"/>
+  <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+  <h1>Home Connect</h1>
+
+  <div class="blind-container">
+
+    <form class="blind-controller" method="post" enctype="multipart/form-data">
+      <label>Küche</label>
+      <input type="hidden" name="id" value="1">
+      <button class="open" type="submit" name="blind" value="up" title="open">&#8593;</button>
+      <button class="stop" type="submit" name="blind" value="stop" title="open">&#9472;</button>
+      <button class="close" type="submit" name="blind" value="down" title="close">&#8595;</button>
+    </form>
+
+    <form class="blind-controller" method="post" enctype="multipart/form-data">
+      <label>Wohnzimmer</label>
+      <input type="hidden" name="id" value="2">
+      <button class="open" type="submit" name="blind" value="up" title="open">&#8593;</button>
+      <button class="stop" type="submit" name="blind" value="stop" title="open">&#9472;</button>
+      <button class="close" type="submit" name="blind" value="down" title="close">&#8595;</button>
+    </form>
+
+  </div>
+</body>
+</html>
