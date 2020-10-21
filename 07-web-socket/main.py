@@ -30,7 +30,6 @@ class HttpRequestHandler(http.server.SimpleHTTPRequestHandler):
 
         variable = ''
         value = ''
-
         for key in form.keys():
             variable = str(key)
             value = str(form.getvalue(variable))
