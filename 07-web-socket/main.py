@@ -1,16 +1,39 @@
 # -*- coding: utf-8 -*-
 import http.server
 import socketserver
+import threading
 import cgi
 import cgitb
 import os
 
 cgitb.enable()
+
 PORT = 8080
+blindStorage = []
 
 # Set dir
 web_dir = os.path.join(os.path.dirname(__file__), 'web')
 os.chdir(web_dir)
+
+class Blind:
+    def __init__(self, id, status):
+        self.id = id
+        self.status = status
+
+    def getId(self):
+        return self.id
+
+    def getStatus(self):
+        return self.status
+
+    def setStatus(self, status):
+        self.status = status
+
+class WebSocket:
+    def __init__(self, port = 8080):
+        self.port = port
+        httpd = socketserver.TCPServer(('', self.port), HttpRequestHandler)
+        httpd.serve_forever()
 
 # HTTP Request handler
 class HttpRequestHandler(http.server.SimpleHTTPRequestHandler):
@@ -26,21 +49,22 @@ class HttpRequestHandler(http.server.SimpleHTTPRequestHandler):
             environ={'REQUEST_METHOD': 'POST'}
         )
 
+        # Add Log file
         log_file = open('log.txt', 'a')
 
-        variable = ''
-        value = ''
-        for key in form.keys():
-            variable = str(key)
-            value = str(form.getvalue(variable))
-            log_file.write(variable + "\n")
-            log_file.write(value + "\n")
+        blindCreateStatus = True
+        for i, item in enumerate(blindStorage):
+            if item.getId() == form.getvalue('id'):
+                blindStorage[i].setStatus(form.getvalue('blind'))
+                blindCreateStatus = False
+                log_file.write('UPDATE: ' + form.getvalue('id') + ' => ' + form.getvalue('blind') + '\n')
+
+        if blindCreateStatus == True:
+            blindStorage.append(Blind(form.getvalue('id'), form.getvalue('blind')))
+            log_file.write('CREATE: ' + form.getvalue('id') + ' => ' + form.getvalue('blind') + '\n')
 
         log_file.flush()
         self.do_GET()
 
-        # self.do_GET()
-
-# Create Socketserver
-httpd = socketserver.TCPServer(('', PORT), HttpRequestHandler)
-httpd.serve_forever()
+webSocketThread = threading.Thread(target=WebSocket)
+webSocketThread.start()
