@@ -35,8 +35,27 @@ class Statistics(Canvas):
 
         self.db = Db()
         self.data = self.db.getTemperatures(dateFrom, dateTo)
+        print(self.data)
         
-        self.printStatistic()
+        if self.data:
+            self.firstDate= min(self.data)
+            self.lastDate = max(self.data)
+            # self.diffDate = self.lastDate[] - self.firstDate
+            
+            print(self.data)
+            print(self.firstDate)
+            print(self.lastDate)
+            
+            print(type(self.data))
+            print(self.firstDate)
+            print(type(self.firstDate[1]))
+            
+            # print(self.diffDate)
+        else:
+            print('Temperatures DB is empty')
+            
+            
+            self.printStatistic()
         
     def printStatistic(self):
         # Start print staic method

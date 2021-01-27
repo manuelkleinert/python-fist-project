@@ -13,7 +13,7 @@ class Application(Frame):
         master.title('Temperature Statistics')
         
         self.db = Db()
-        # self.db.addTemperature(19.2)
+        self.db.addTemperature(21.5)
         
         self.tabs = Taps(master)
         tapHome = self.tabs.addTap('Home Controlls')
