@@ -9,7 +9,10 @@ class Taps(Notebook):
         Notebook.__init__(self, *args)
         self.pack(expand = 1, fill ="both")
 
-    def addTap(self, title):
-        tapFrame = ttk.Frame(self)
+    def addTap(self, title, tapFrame = None):
+        if not tapFrame:
+            tapFrame = ttk.Frame(self)
+            tapFrame.pack(side = 'left')
+            
         self.add(tapFrame, text=title)
         return tapFrame
