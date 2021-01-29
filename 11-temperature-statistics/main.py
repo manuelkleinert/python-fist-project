@@ -1,6 +1,6 @@
 from tkinter import Tk, Frame, Label
 from helper.taps import Taps
-# from temperature.db import Db
+from temperature.db import Db
 from temperature.statisticFrame import StatisticFrame
 
 class Application(Frame):
@@ -11,8 +11,9 @@ class Application(Frame):
         master.title('Temperature Statistics')
         
         # Tutorial Add a new Temperature
-        # self.db = Db()
-        # self.db.addTemperature(22.5)
+        self.db = Db()
+        # self.db.addStation('Garten')
+        # self.db.addTemperature(1, 19.8657)
         
         tabs = Taps(self)
         

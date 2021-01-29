@@ -1,7 +1,7 @@
 from .db import Db
-from tkinter import Canvas
 from datetime import datetime
 from collections import namedtuple
+from tkinter import Canvas, messagebox
 
 
 class StatisticPrint(Canvas):
@@ -9,7 +9,7 @@ class StatisticPrint(Canvas):
     Statistic print canvas class
     '''
     
-    def __init__(self, master, dateFrom = datetime.today(), dateTo = datetime.today(), statisticType = 'day'):
+    def __init__(self, master, stationId, dateFrom = datetime.today(), dateTo = datetime.today(), statisticType = 'day'):
         '''
         Parameters
         ----------
@@ -26,6 +26,7 @@ class StatisticPrint(Canvas):
         # Statistic size
         self.width = 1000
         self.height = 800
+        self.lineColors = ['#FF0000', '#00FF00', '#0000FF',  '#FFFF00']
         
         Canvas.__init__(self, master, width=self.width, height=self.height)
         
@@ -46,24 +47,24 @@ class StatisticPrint(Canvas):
             self.height - self.border.top - self.border.bottom, 
             self.width - self.border.left - self.border.right)
         
-        self.pack(expand=1)
+        self.pack(expand = 1, side = 'bottom')
         
-        self.set(dateFrom, dateTo, statisticType)
+        self.set(stationId, dateFrom, dateTo, statisticType)
     
-    def set(self, dateFrom = datetime.today(), dateTo = datetime.today(), statisticType = 'day'):
+    def set(self, stationId, dateFrom = datetime.today(), dateTo = datetime.today(), statisticType = 'day'):
+        self.stationId = stationId
         self.statisticType = statisticType
-        self.data = self.db.getData(dateFrom, dateTo)
+        self.data = self.db.getData(stationId, dateFrom, dateTo, statisticType)
         
         if self.data:
             self.delete('all')
             self.printStatistic()
             self.printBorder()
         else:
-            print('Temperatures DB is empty')
+            messagebox.showwarning(title = 'DB', message = 'Temperatures DB is empty')
         
     def printBorder(self):
         # Print statistic border method
-        
         borderColor = '#666666'
         
         self.create_polygon([
@@ -83,7 +84,7 @@ class StatisticPrint(Canvas):
         
         # Horizontal (Temperatures)
         horizontalIndex = 1
-        horizontalSpacing = self.statistic.height / (self.getMaxTemp() - self.getMinTemp())
+        horizontalSpacing = self.statistic.height / self.getMinMaxTempDiff()
         
         for temp in range(self.getMaxTemp(), self.getMinTemp(), -1):
             self.create_line(self.statistic.left, 
@@ -100,10 +101,10 @@ class StatisticPrint(Canvas):
         # Vertical lines (Date)
         if self.statisticType == 'year':
             dateMin = 1
-            dateMax = self.data.dateTo.day
+            dateMax = 12
         elif self.statisticType == 'month':
             dateMin = 1
-            dateMax = 12
+            dateMax = self.data.dateTo.day
         else:
             dateMin = 1
             dateMax = 24
@@ -123,21 +124,35 @@ class StatisticPrint(Canvas):
             self.create_text(verticalSpacing*verticalIndex, self.statistic.bottom + self.border.bottom/2 , text=str(i), fill=textColor)
             verticalIndex += 1
         
-    #     # Print Temperature line
-    #     linePoints = [self.border, self.statisticHeight]
-    
-    #     for temp in self.data['temperatures']:
-    #         linePoints += self.calcTempPosition(temp['temperature'])
+        # Print Temperature line
+        colorIndex = 0
+        for key, tempList in self.data.temperatures.items():
+            linePoints = [self.statistic.left, self.statistic.bottom]
+            if tempList:
+                for temp in tempList:
+                    linePoints += self.calcTempPosition(temp)
+            linePoints += [self.statistic.right, self.statistic.bottom]
+            self.create_polygon(linePoints, fill = '', outline=self.lineColors[colorIndex], width = 3)
+            colorIndex += 1
+ 
         
-    #     self.create_polygon(linePoints, outline='green', fill='yellow', width=3)
-    #     print(linePoints)
+    def calcTempPosition(self, tempObj):
+        tempY = (self.statistic.height / self.getMinMaxTempDiff()) * (tempObj.temperature - self.getMinTemp())
         
-    # def calcTempPosition(self, temperature):
-    #     print(temperature)
-    #     return [100,200]
+        if self.statisticType == 'year':
+            tempX = (self.statistic.width / 12) * tempObj.date.month
+        elif self.statisticType == 'month':
+            tempX = (self.statistic.width / self.data.dateTo.day) * tempObj.date.day
+        else:
+            tempX = (self.statistic.width / 24) * tempObj.date.hour
+        
+        return [tempX, tempY]
     
     def getMinTemp(self):
-        return round(self.data.minTemp) - 1
+        return round(self.data.minTemp.temperature) - 1
     
     def getMaxTemp(self):
-        return round(self.data.maxTemp) + 1
+        return round(self.data.maxTemp.temperature) + 1
+    
+    def getMinMaxTempDiff(self):
+        return self.getMaxTemp() - self.getMinTemp()

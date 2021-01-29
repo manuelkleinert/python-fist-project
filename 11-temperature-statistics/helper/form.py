@@ -3,6 +3,7 @@ from tkinter import Frame, Label, StringVar, OptionMenu, W
 class Select(Frame):
     def __init__(self, master = None, labelText = '', options = [], width = 30):
         Frame.__init__(self, master)
+        
         self.pack()
         
         self.options = options
