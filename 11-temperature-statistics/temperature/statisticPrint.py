@@ -56,8 +56,9 @@ class StatisticPrint(Canvas):
         self.statisticType = statisticType
         self.data = self.db.getData(stationId, dateFrom, dateTo, statisticType)
         
+        self.delete('all')
+        
         if self.data:
-            self.delete('all')
             self.printStatistic()
             self.printBorder()
         else:
@@ -115,11 +116,11 @@ class StatisticPrint(Canvas):
         for i in range(dateMin, dateMax + 1):
             if i+1 < dateMax:
                 self.create_line(self.statistic.left + (verticalSpacing*verticalIndex), 
-                                self.statistic.top, 
-                                self.statistic.left + (verticalSpacing*verticalIndex), 
-                                self.statistic.bottom, 
-                                fill = rasterColor, 
-                                width = rasterWidth)
+                    self.statistic.top, 
+                    self.statistic.left + (verticalSpacing*verticalIndex), 
+                    self.statistic.bottom, 
+                    fill = rasterColor, 
+                    width = rasterWidth)
             
             self.create_text(verticalSpacing*verticalIndex, self.statistic.bottom + self.border.bottom/2 , text=str(i), fill=textColor)
             verticalIndex += 1

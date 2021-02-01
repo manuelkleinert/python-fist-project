@@ -12,16 +12,18 @@ class Application(Frame):
         
         # Tutorial Add a new Temperature
         self.db = Db()
+        
         # self.db.addStation('Garten')
-        # self.db.addTemperature(1, 19.8657)
+        # self.db.addTemperature(1, 21.8.8657)
         
         tabs = Taps(self)
         
-        tapTemperature = tabs.addTap('Temperature Statistics', StatisticFrame())
+        tabs.addTap('Temperature Statistics', StatisticFrame())
         
         tapHome = tabs.addTap('Home Controlls')
         homeText = Label(tapHome, text="Home Content")
         homeText.pack()
-    
+
+
 app = Application(Tk())
 app.mainloop()
