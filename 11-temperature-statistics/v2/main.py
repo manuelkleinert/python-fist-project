@@ -14,7 +14,7 @@ class Application(Frame):
         self.db = Db()
         
         # self.db.addStation('Garten')
-        # self.db.addTemperature(1, 21.8.8657)
+        # self.db.addTemperature(1, 21.88657)
         
         tabs = Taps(self)
         

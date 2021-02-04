@@ -1,0 +1,38 @@
+dist: xenial
+language: python
+cache: pip
+python:
+- '3.5'
+- 3.5-dev
+- '3.6'
+- 3.6-dev
+- '3.7'
+- 3.7-dev
+install:
+- pip install pipenv
+- pipenv --python ${TRAVIS_PYTHON_VERSION}
+- pipenv sync --dev
+before_script:
+- flake8 google_oauth2_tool
+script:
+- pytest -vv -x tests
+stages:
+- test
+- deploy
+jobs:
+  include:
+  - stage: deploy
+    python: '3.6'
+    install: skip
+    before_script: skip
+    script: skip
+    deploy:
+      provider: pypi
+      user: dlancer
+      password:
+        secure: "U+e00xd1IAtZCiepEnuLvpVP9UsIRz7Bl3bqyqSt+LbhKrW6g4bAjmbznn2f+Ep/e8+oUGYoSXArqNJ1gc08ssGx9JadGMpI3j5vmQdZkZqehOeICRLDBvKC57t9qBBnNWsdBi3DbR783mLnrxZUzrd+VrH2Gng3e2ChZIHpdVaoVMjw3Gqnu+XvNlo1QEVWdV/bZ/xgUaeiJc7cUaPopgDvKAQPWjHtsw1UjjYBSVsV4c2vggpPH2S1eimoTYinQeRg5+3dK//PSFbpO0S3uYSiW4+4ptVBZXwsGwqDBQQ14+6hJHseIXKS2VMUyA8eaSgSgn+S7mtusKhA3jM78f+AFwBLIS3tkoXOqCG8K5QmA4iZo4P7OaJJtDyi2lbEM3sofhn/duhrkX79Gnz7ty+aI6MlR0RSJsnAjY8hwr/pjtPkuNyiwGm4jfvrWgxW3ZmO5Cyyu/IroGduMv7PVmuNRsYlhcc58KNDWrxYbrevXPjEksK/8O6eSNDfEkisf8FT6+NSroeRJIitPrMGaABPo1WpLA6M1Kz/N2lnOQXz6dy9TVlz2msu581TlBOMLJfVJGbFzMQxymyCTFhAtaHoO34VGjvy1R4y18374zM5sAInKZg9JzbybhDsM7DNTjL4FtwJxFpI8aYktJu+G5MaXGwfJ8t3F6wU/AcPbes="
+      on:
+        tags: true
+        branch: master
+        condition: "$TRAVIS_TAG =~ ^v[0-9]+\\.[0-9]+\\.[0-9]+"
+      distributions: sdist bdist_wheel

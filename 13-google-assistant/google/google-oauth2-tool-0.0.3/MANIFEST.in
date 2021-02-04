@@ -1,0 +1,7 @@
+include *.md *.txt *.rst
+
+include LICENSE
+
+recursive-include google_oauth2_tool *
+
+recursive-exclude * *.py[co]

@@ -1,0 +1,20 @@
+[[source]]
+name = "pypi"
+url = "https://pypi.org/simple"
+verify_ssl = true
+
+[dev-packages]
+pytest = "*"
+v = {editable = true,version = "*"}
+flake8 = "*"
+isort = "*"
+coverage = "*"
+pytest-cov = "*"
+pygments = "*"
+
+[packages]
+google-api-python-client = "*"
+oauth2client = "*"
+
+[requires]
+python_version = "3.6"
