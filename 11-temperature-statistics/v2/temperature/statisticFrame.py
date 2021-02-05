@@ -16,6 +16,7 @@ class StatisticFrame(Frame):
         # Db
         db = Db()
         
+        # Datetime now
         now = datetime.now()
         
         # Station selectbox
@@ -30,28 +31,20 @@ class StatisticFrame(Frame):
         self.statisticTypeSelect.setEvent(self.updateStatistic)
         self.statisticTypeSelect.setValue('Day')
         
-        # Date from calendar
+        # Date from calendar (7 Days before now)
         self.dateFromSelect = DateEntry(self, selectmode = 'day', date_pattern = 'dd.mm.y')
-        self.dateFromSelect.set_date(self.firstDayOfMonth(now))
+        self.dateFromSelect.set_date((now - timedelta(days=7)))
         self.dateFromSelect.bind("<<DateEntrySelected>>", self.updateStatistic)  
         self.dateFromSelect.pack()
         
         # Date to calendar
         self.dateToSelect = DateEntry(self, selectmode = 'day', date_pattern = 'dd.mm.y')
-        self.dateToSelect.set_date(self.lastDayOfMonth(now))
+        self.dateToSelect.set_date(now)
         self.dateToSelect.bind("<<DateEntrySelected>>", self.updateStatistic)  
         self.dateToSelect.pack()
         
-        # Update statistic
-        self.updateStatistic()
-    
+        # Statistic
+        self.statistic = StatisticPrint(self, self.stationSelect.get(), self.dateFromSelect.get_date(), self.dateToSelect.get_date(), self.statisticTypeSelect.get())
+        
     def updateStatistic(self, *args):
-        StatisticPrint(self, self.stationSelect.get(), self.dateFromSelect.get_date(), self.dateToSelect.get_date(), self.statisticTypeSelect.get())
- 
-    def firstDayOfMonth(self, d):
-        return d.replace(day = 1, hour = 0, minute = 0, second = 0, microsecond = 0)
-    
-    def lastDayOfMonth(self, d):
-        if d.month == 12:
-            return d.replace(day = 31)
-        return d.replace(month = d.month + 1, day = 1) - timedelta(days = 1)
+        self.statistic.set(self.stationSelect.get(), self.dateFromSelect.get_date(), self.dateToSelect.get_date(), self.statisticTypeSelect.get())
